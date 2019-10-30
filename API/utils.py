@@ -1,3 +1,5 @@
+import copy
+
 ROWS = ['1', '2', '3', '4', '5', '6', '7', '8']
 COLUMNS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
@@ -131,11 +133,16 @@ def filter_moves(piece, board):
     for move in possible_moves:
         square = board.get_square(move)
         if square == 'empty' or square.color != piece.color:
-            if piece.type in ['bishop', 'queen']:
+            if piece.type == 'bishop':
                 if move in available_diagonal(piece.column, piece.row, board):
                     filtered_moves.append(move)
-            elif piece.type in ['rook', 'queen']:
+            elif piece.type == 'rook':
                 if move in available_line(piece.column, piece.row, board):
+                    filtered_moves.append(move)
+            elif piece.type == 'queen':
+                if move in available_line(piece.column, piece.row, board):
+                    filtered_moves.append(move)
+                if move in available_diagonal(piece.column, piece.row, board):
                     filtered_moves.append(move)
             elif piece.type == 'pawn':
                 if piece.color == 'white':
@@ -160,4 +167,143 @@ def filter_moves(piece, board):
                 filtered_moves.append(move)
     
     return filtered_moves
-            
+
+
+
+def get_attacked_diagonal(piece, board):
+    attacked_diag = []
+    i = piece.column
+    j = piece.row
+    found_attacked = False
+    while i != 'H' and j != '8' and not found_attacked:
+        i = next_column(i)
+        j = next_row(j)
+        square = board.get_square(i + j)
+        if square != 'empty':
+            if square.color != piece.color:
+                attacked_diag.append(i + j)
+                found_attacked = True
+    i = piece.column
+    j = piece.row
+    found_attacked = False
+    while i != 'H' and j != '1' and not found_attacked:
+        i = next_column(i)
+        j = previous_row(j)
+        square = board.get_square(i + j)
+        if square != 'empty':
+            if square.color != piece.color:
+                attacked_diag.append(i + j)
+                found_attacked = True
+    i = piece.column
+    j = piece.row
+    found_attacked = False
+    while i != 'A' and j != '8' and not found_attacked:
+        i = previous_column(i)
+        j = next_row(j)
+        square = board.get_square(i + j)
+        if square != 'empty':
+            if square.color != piece.color:
+                attacked_diag.append(i + j)
+                found_attacked = True
+    i = piece.column
+    j = piece.row
+    found_attacked = False
+    while i != 'A' and j != '1' and not found_attacked:
+        i = previous_column(i)
+        j = previous_row(j)
+        square = board.get_square(i + j)
+        if square != 'empty':
+            if square.color != piece.color:
+                attacked_diag.append(i + j)
+                found_attacked = True
+    return attacked_diag
+
+
+def get_attacked_line(piece, board):
+    attacked_line = []
+    i = piece.column
+    j = piece.row
+    found_attacked = False
+    while i != 'A' and not found_attacked:
+        i = previous_column(i)
+        square = board.get_square(i + j)
+        if square != 'empty':
+            if square.color != piece.color:
+                attacked_line.append(i + j)
+                found_attacked = True
+    i = piece.column
+    found_attacked = False
+    while i != 'H' and not found_attacked:
+        i = next_column(i)
+        square = board.get_square(i + j)
+        if square == 'empty':
+            if square.color != piece.color:
+                attacked_line.append(i + j)
+                found_attacked = True
+    i = piece.column
+    found_attacked = False
+    while j != '1' and not found_attacked:
+        j = previous_row(j)
+        square = board.get_square(i + j)
+        if square != 'empty':
+            if square.color != piece.color:
+                attacked_line.append(i + j)
+                found_attacked = True
+    j = piece.row
+    found_attacked = False
+    while j != '8' and not found_attacked:
+        j = next_row(j)
+        square = board.get_square(i + j)
+        if square != 'empty':
+            if square.color != piece.color:
+                attacked_line.append(i + j)
+                found_attacked = True
+    
+    return attacked_line
+
+
+def attacked_pieces(piece, board):
+    attacked = []
+    if piece.type == 'bishop':
+        attacked += get_attacked_diagonal(piece, board)
+    elif piece.type == 'rook':
+        attacked += get_attacked_line(piece, board)
+    elif piece.type == 'queen':
+        attacked += get_attacked_line(piece, board)
+        attacked += get_attacked_diagonal(piece, board)
+    elif piece.type == 'knight':
+        for move in piece.get_possible_moves():
+            square = board.get_square(move)
+            if square != 'empty':
+                if square.color != piece.color:
+                    attacked.append(move)
+    elif piece.type == 'king':
+        for move in piece.get_possible_moves():
+            square = board.get_square(move)
+            if square != 'empty':
+                if square.color != piece.color:
+                    attacked.append(move)
+    else:
+        for move in piece.get_possible_moves():
+            if move[0] != piece.column:
+                square = board.get_square(move)
+                if square != 'empty':
+                    if square.color != piece.color:
+                        attacked.append(move)
+    
+    return attacked
+
+
+def filter_check(piece, board):
+    filtered_check = []
+    for movement in filter_moves(piece, board):
+        board_temp = copy.deepcopy(board)
+        board_temp.get_square(piece.column + piece.row).move(movement)
+        if piece.color == 'white':
+            if not board_temp.is_white_checked():
+                filtered_check.append(movement)
+        else:
+            if not board_temp.is_black_checked():
+                filtered_check.append(movement)
+    
+    return filtered_check

@@ -1,4 +1,4 @@
-from utils import ROWS, COLUMNS, previous_column, next_column, previous_row, next_row, diagonals, filter_moves
+from utils import ROWS, COLUMNS, previous_column, next_column, previous_row, next_row, diagonals, filter_moves, attacked_pieces, filter_check
 
 class Board:
 
@@ -61,10 +61,60 @@ class Board:
         self.black_bishops = [bishop for bishop in self.bishops if bishop.color == 'black']
         self.black_knights = [knight for knight in self.knights if knight.color == 'black']
         self.black_rooks = [rook for rook in self.rooks if rook.color == 'black']
-        self.black_queens= [queen for queen in self.queens if queen.color == 'black']
+        self.black_queens = [queen for queen in self.queens if queen.color == 'black']
         self.black_king = self.kings[0] if self.kings[0].color == 'black' else self.kings[1] 
 
         self.black_pieces = self.black_pawns + self.black_bishops + self.black_knights + self.black_rooks + self.black_queens + [self.black_king]
+
+    def is_white_checked(self):
+        for bishop in self.black_bishops:
+            if self.white_king.column + self.white_king.row in attacked_pieces(bishop, self):
+                return True
+        for knight in self.black_knights:
+            if self.white_king.column + self.white_king.row in attacked_pieces(knight, self):
+                return True
+        for rook in self.black_rooks:
+            if self.white_king.column + self.white_king.row in attacked_pieces(bishop, self):
+                return True
+        for queen in self.black_queens:
+            if self.white_king.column + self.white_king.row in attacked_pieces(queen, self):
+                return True
+        for pawn in self.black_pawns:
+            if self.white_king.column + self.white_king.row in attacked_pieces(pawn, self):
+                return True
+
+        return False
+
+    def is_black_checked(self):
+        for bishop in self.white_bishops:
+            if self.black_king.column + self.black_king.row in attacked_pieces(bishop, self):
+                return True
+        for knight in self.white_knights:
+            if self.black_king.column + self.black_king.row in attacked_pieces(knight, self):
+                return True
+        for rook in self.white_rooks:
+            if self.black_king.column + self.black_king.row in attacked_pieces(bishop, self):
+                return True
+        for queen in self.white_queens:
+            if self.black_king.column + self.black_king.row in attacked_pieces(queen, self):
+                return True
+        for pawn in self.white_pawns:
+            if self.black_king.column + self.black_king.row in attacked_pieces(pawn, self):
+                return True
+    
+        return False
+            
+    def is_white_checkmated(self):
+        for piece in self.white_pieces:
+            if len(filter_check(piece, self)) >= 1:
+                return False
+        return True
+
+    def is_black_checkmated(self):
+        for piece in self.white_pieces:
+            if len(filter_check(piece, self)) >= 1:
+                return False
+        return True
 
     def get_square(self, square):
         for pawn in self.pawns:
@@ -96,7 +146,11 @@ class Piece:
         self.row = row
         self.column = column
         self.possible_moves = []
-        self.filtered_moves = []
+    
+    def move(self, square):
+        self.column = square[0]
+        self.row = square[1]
+        return None
 
 class Knight(Piece):
     def __init__(self, color, row, column):
