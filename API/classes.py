@@ -138,6 +138,39 @@ class Board:
         
         return 'empty'
 
+    def erase(self, square):
+        if square.color == 'black':
+            if square.type == 'bishop':
+                self.bishops.remove(square)
+                self.black_bishops.remove(square)
+            elif square.type == 'knight':
+                self.knights.remove(square)
+                self.black_knights.remove(square)
+            elif square.type == 'rook':
+                self.rooks.remove(square)
+                self.black_rooks.remove(square)
+            elif square.type == 'queen':
+                self.queens.remove(square)
+                self.black_queens.remove(square)
+            elif square.type == 'pawn':
+                self.pawns.remove(square)
+                self.black_pawns.remove(square)
+        else:
+            if square.type == 'bishop':
+                self.bishops.remove(square)
+                self.white_bishops.remove(square)
+            elif square.type == 'knight':
+                self.knights.remove(square)
+                self.white_knights.remove(square)
+            elif square.type == 'rook':
+                self.rooks.remove(square)
+                self.white_rooks.remove(square)
+            elif square.type == 'queen':
+                self.queens.remove(square)
+                self.white_queens.remove(square)
+            elif square.type == 'pawn':
+                self.pawns.remove(square)
+                self.white_pawns.remove(square)
 
 
 class Piece:
@@ -146,11 +179,7 @@ class Piece:
         self.row = row
         self.column = column
         self.possible_moves = []
-    
-    def move(self, square):
-        self.column = square[0]
-        self.row = square[1]
-        return None
+
 
 class Knight(Piece):
     def __init__(self, color, row, column):
