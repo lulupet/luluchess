@@ -144,28 +144,27 @@ def filter_moves(piece, board):
                     filtered_moves.append(move)
                 if move in available_diagonal(piece.column, piece.row, board):
                     filtered_moves.append(move)
-            elif piece.type == 'pawn':
-                if piece.color == 'white':
-                    if move[1] == '4' and piece.row == '2':
-                        if board.get_square(piece.column + '3') == 'empty':
-                            filtered_moves.append(move)
-                    else:
-                        if move[0] == piece.column and square == 'empty':
-                            filtered_moves.append(move)
-                else:
-                    if move[1] == '5' and piece.row == '7':
-                        if board.get_square(piece.column + '6') == 'empty':
-                            filtered_moves.append(move)
-                    else:
-                        if move[0] == piece.column and square == 'empty':
-                            filtered_moves.append(move)
             elif piece.type == 'knight':
                 filtered_moves.append(move)
-            else:
+            elif piece.type == 'king':
                 filtered_moves.append(move)
         if piece.type == 'pawn':                  
             if move[0] != piece.column and square != 'empty' and square.color != piece.color:
                 filtered_moves.append(move)
+            if piece.color == 'white':
+                if move[1] == '4' and piece.row == '2':
+                    if board.get_square(piece.column + '3') == 'empty' and square == 'empty':
+                        filtered_moves.append(move)
+                else:
+                    if move[0] == piece.column and square == 'empty':
+                        filtered_moves.append(move)
+            else:
+                if move[1] == '5' and piece.row == '7':
+                    if board.get_square(piece.column + '6') == 'empty' and square == 'empty':
+                        filtered_moves.append(move)
+                else:
+                    if move[0] == piece.column and square == 'empty':
+                        filtered_moves.append(move)
     
     return filtered_moves
 
@@ -299,7 +298,7 @@ def filter_check(piece, board):
     filtered_check = []
     for movement in filter_moves(piece, board):
         board_temp = copy.deepcopy(board)
-        move(board_temp.get_square(piece.column + piece.row), movement, board)
+        move(board_temp.get_square(piece.column + piece.row), movement, board_temp)
         if piece.color == 'white':
             if not board_temp.is_white_checked():
                 filtered_check.append(movement)
@@ -313,5 +312,9 @@ def move(piece, move, board):
     square = board.get_square(move[0] + move[1])
     if square != 'empty':
         board.erase(square)
-    piece.column = move[0]
-    piece.row = move[1]
+    if piece.type == 'pawn' and move[1] in ['1', '8']:
+        board.erase(board.get_square(piece.column + piece.row))
+        board.promote(square, piece.color)
+    else:
+        piece.column = move[0]
+        piece.row = move[1]

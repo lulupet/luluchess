@@ -6,7 +6,7 @@ def lionMate():
     move(board.pawns[5], 'F3', board)
     move(board.pawns[12], 'E5', board)
     move(board.pawns[6], 'G4', board)
-    move(board.black_queens[0], 'H4', board)
+    move(board.get_black_queens()[0], 'H4', board)
     print(board.is_white_checkmated())
 
 def scandinavian():
