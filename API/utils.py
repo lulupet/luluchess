@@ -1,4 +1,5 @@
 import copy
+from random import randint
 
 ROWS = ['1', '2', '3', '4', '5', '6', '7', '8']
 COLUMNS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -236,7 +237,7 @@ def get_attacked_line(piece, board):
     while i != 'H' and not found_attacked:
         i = next_column(i)
         square = board.get_square(i + j)
-        if square == 'empty':
+        if square != 'empty':
             if square.color != piece.color:
                 attacked_line.append(i + j)
                 found_attacked = True
@@ -314,7 +315,29 @@ def move(piece, move, board):
         board.erase(square)
     if piece.type == 'pawn' and move[1] in ['1', '8']:
         board.erase(board.get_square(piece.column + piece.row))
-        board.promote(square, piece.color)
+        board.promote(move[0] + move[1], piece.color)
     else:
         piece.column = move[0]
         piece.row = move[1]
+
+
+def get_next_move(board, color):
+    if color == 'black':
+        all_moves = []
+        for piece in board.get_black_pieces():
+            for move in filter_check(piece, board):
+                all_moves.append({
+                    'start': piece.column + piece.row,
+                    'end': move
+                })
+    else:
+        all_moves = []
+        for piece in board.get_white_pieces():
+            for move in filter_check(piece, board):
+                all_moves.append({
+                    'start': piece.column + piece.row,
+                    'end': move
+                })
+    index = randint(0, len(all_moves) - 1)
+    return all_moves[index]
+    
