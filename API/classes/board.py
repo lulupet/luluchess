@@ -176,5 +176,5 @@ class Board:
             self.pawns.remove(square)
     
     def promote(self, square, color):
-        queen = (color, square[1], square[0])
+        queen = Queen(color, square[1], square[0])
         self.queens.append(queen)
