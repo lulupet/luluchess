@@ -1,4 +1,5 @@
-from classes import *
+from classes.board import *
+from classes.pieces import *
 from utils import *
 
 def lionMate():
