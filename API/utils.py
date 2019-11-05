@@ -321,7 +321,7 @@ def move(piece, move, board):
         piece.row = move[1]
 
 
-def get_next_move(board, color):
+def get_all_moves(board, color):
     if color == 'black':
         all_moves = []
         for piece in board.get_black_pieces():
@@ -338,6 +338,11 @@ def get_next_move(board, color):
                     'start': piece.column + piece.row,
                     'end': move
                 })
+    return all_moves
+
+
+def get_next_move(board, color):
+    all_moves = get_all_moves(board, color)
     index = randint(0, len(all_moves) - 1)
     return all_moves[index]
     
