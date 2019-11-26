@@ -1,4 +1,5 @@
-from utils import ROWS, COLUMNS, previous_column, next_column, previous_row, next_row, diagonals, filter_moves
+from utils.utils import ROWS, COLUMNS, previous_column, next_column, previous_row, next_row, diagonals
+from utils.moves import legal_moves
 
 class Piece:
     def __init__(self, color, row, column):

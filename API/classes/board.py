@@ -1,5 +1,5 @@
 from classes.pieces import Knight, Bishop, Rook, Queen, King, Pawn
-from utils import attacked_pieces, filter_check
+from utils.utils import attacked_pieces
 
 class Board:
 
@@ -110,6 +110,7 @@ class Board:
 
         return False
 
+
     def is_black_checked(self):
         for bishop in self.get_white_bishops():
             if self.get_black_king().column + self.get_black_king().row in attacked_pieces(bishop, self):
@@ -128,18 +129,7 @@ class Board:
                 return True
     
         return False
-            
-    def is_white_checkmated(self):
-        for piece in self.get_white_pieces():
-            if len(filter_check(piece, self)) >= 1:
-                return False
-        return True
 
-    def is_black_checkmated(self):
-        for piece in self.get_black_pieces():
-            if len(filter_check(piece, self)) >= 1:
-                return False
-        return True
 
     def get_square(self, square):
         for pawn in self.pawns:

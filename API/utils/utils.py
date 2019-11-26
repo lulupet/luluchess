@@ -1,6 +1,3 @@
-import copy
-from random import randint
-
 ROWS = ['1', '2', '3', '4', '5', '6', '7', '8']
 COLUMNS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
@@ -128,49 +125,6 @@ def available_line(column, row, board):
     return available
 
 
-def filter_moves(piece, board):
-    possible_moves = piece.get_possible_moves()
-    filtered_moves = []
-    for move in possible_moves:
-        square = board.get_square(move)
-        if square == 'empty' or square.color != piece.color:
-            if piece.type == 'bishop':
-                if move in available_diagonal(piece.column, piece.row, board):
-                    filtered_moves.append(move)
-            elif piece.type == 'rook':
-                if move in available_line(piece.column, piece.row, board):
-                    filtered_moves.append(move)
-            elif piece.type == 'queen':
-                if move in available_line(piece.column, piece.row, board):
-                    filtered_moves.append(move)
-                if move in available_diagonal(piece.column, piece.row, board):
-                    filtered_moves.append(move)
-            elif piece.type == 'knight':
-                filtered_moves.append(move)
-            elif piece.type == 'king':
-                filtered_moves.append(move)
-        if piece.type == 'pawn':                  
-            if move[0] != piece.column and square != 'empty' and square.color != piece.color:
-                filtered_moves.append(move)
-            if piece.color == 'white':
-                if move[1] == '4' and piece.row == '2':
-                    if board.get_square(piece.column + '3') == 'empty' and square == 'empty':
-                        filtered_moves.append(move)
-                else:
-                    if move[0] == piece.column and square == 'empty':
-                        filtered_moves.append(move)
-            else:
-                if move[1] == '5' and piece.row == '7':
-                    if board.get_square(piece.column + '6') == 'empty' and square == 'empty':
-                        filtered_moves.append(move)
-                else:
-                    if move[0] == piece.column and square == 'empty':
-                        filtered_moves.append(move)
-    
-    return filtered_moves
-
-
-
 def get_attacked_diagonal(piece, board):
     attacked_diag = []
     i = piece.column
@@ -293,56 +247,4 @@ def attacked_pieces(piece, board):
                         attacked.append(move)
     
     return attacked
-
-
-def filter_check(piece, board):
-    filtered_check = []
-    for movement in filter_moves(piece, board):
-        board_temp = copy.deepcopy(board)
-        move(board_temp.get_square(piece.column + piece.row), movement, board_temp)
-        if piece.color == 'white':
-            if not board_temp.is_white_checked():
-                filtered_check.append(movement)
-        else:
-            if not board_temp.is_black_checked():
-                filtered_check.append(movement)
-    
-    return filtered_check
-
-def move(piece, move, board):
-    square = board.get_square(move[0] + move[1])
-    if square != 'empty':
-        board.erase(square)
-    if piece.type == 'pawn' and move[1] in ['1', '8']:
-        board.erase(board.get_square(piece.column + piece.row))
-        board.promote(move[0] + move[1], piece.color)
-    else:
-        piece.column = move[0]
-        piece.row = move[1]
-
-
-def get_all_moves(board, color):
-    if color == 'black':
-        all_moves = []
-        for piece in board.get_black_pieces():
-            for move in filter_check(piece, board):
-                all_moves.append({
-                    'start': piece.column + piece.row,
-                    'end': move
-                })
-    else:
-        all_moves = []
-        for piece in board.get_white_pieces():
-            for move in filter_check(piece, board):
-                all_moves.append({
-                    'start': piece.column + piece.row,
-                    'end': move
-                })
-    return all_moves
-
-
-def get_next_move(board, color):
-    all_moves = get_all_moves(board, color)
-    index = randint(0, len(all_moves) - 1)
-    return all_moves[index]
     
