@@ -109,22 +109,13 @@ def legal_moves(piece, game):
 
 
 def get_all_moves(game, color): ##CHANGE MOVE TYPE
+    all_moves = []
     if color == 'black':
-        all_moves = []
         for piece in game.board.get_black_pieces():
-            for move in legal_moves(piece, game):
-                all_moves.append({
-                    'start': piece.column + piece.row,
-                    'end': move
-                })
+            all_moves += legal_moves(piece, game)
     else:
-        all_moves = []
-        for piece in game.board.get_white_pieces():
-            for move in legal_moves(piece, game):
-                all_moves.append({
-                    'start': piece.column + piece.row,
-                    'end': move
-                })
+        for piece in game.board.get_black_pieces():
+            all_moves += legal_moves(piece, game)
     return all_moves
 
 

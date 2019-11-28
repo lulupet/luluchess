@@ -594,6 +594,7 @@ class ChessTest(unittest.TestCase):
 
         self.assertEqual(len([mv for mv in legal_moves(game.board.get_square('E1'), game) if mv["type"] == 'castle']), 0)
         
+        
     def test_castle_king_attacked(self):
         game= Game()
         mv = {
@@ -646,6 +647,7 @@ class ChessTest(unittest.TestCase):
         move(game.board.get_square('F8'), mv, game)
 
         self.assertEqual(len([mv for mv in legal_moves(game.board.get_square('E1'), game) if mv["type"] == 'castle']), 0)
+
 
     def test_promote_white_pawn(self):
         game = Game()
@@ -770,6 +772,126 @@ class ChessTest(unittest.TestCase):
         self.assertEqual(len(game.board.get_black_queens()), 2)
         self.assertEqual(len(game.board.get_black_pawns()), 7)
         
+
+    def test_pat(self):
+        game = Game()
+        mv = {
+            "type": "normal",
+            "start": "E2",
+            "end": "E3"
+        }
+        move(game.board.get_square('E2'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "A7",
+            "end": "A5"
+        }
+        move(game.board.get_square('A7'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "D1",
+            "end": "H5"
+        }
+        move(game.board.get_square('D1'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "A8",
+            "end": "A6"
+        }
+        move(game.board.get_square('A8'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "H5",
+            "end": "A5"
+        }
+        move(game.board.get_square('H5'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "H7",
+            "end": "H5"
+        }
+        move(game.board.get_square('H7'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "A5",
+            "end": "C7"
+        }
+        move(game.board.get_square('A5'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "A6",
+            "end": "H6"
+        }
+        move(game.board.get_square('A6'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "H2",
+            "end": "H4"
+        }
+        move(game.board.get_square('H2'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "F7",
+            "end": "F6"
+        }
+        move(game.board.get_square('F7'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "C7",
+            "end": "D7"
+        }
+        move(game.board.get_square('C7'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "E8",
+            "end": "F7"
+        }
+        move(game.board.get_square('E8'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "D7",
+            "end": "B7"
+        }
+        move(game.board.get_square('D7'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "D8",
+            "end": "D3"
+        }
+        move(game.board.get_square('D8'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "B7",
+            "end": "B8"
+        }
+        move(game.board.get_square('B7'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "D3",
+            "end": "H7"
+        }
+        move(game.board.get_square('D3'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "B8",
+            "end": "C8"
+        }
+        move(game.board.get_square('B8'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "F7",
+            "end": "G6"
+        }
+        move(game.board.get_square('F7'), mv, game)
+        mv = {
+            "type": "normal",
+            "start": "C8",
+            "end": "E6"
+        }
+        move(game.board.get_square('C8'), mv, game)
+
+        self.assertTrue(game.is_pat("black"))
+
 
 if __name__ == '__main__':
     unittest.main()

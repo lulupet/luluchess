@@ -1,5 +1,5 @@
 from classes.board import Board
-from utils.moves import legal_moves
+from utils.moves import legal_moves, get_all_moves
 
 class Game:
 
@@ -85,4 +85,9 @@ class Game:
                 rooks.append(self.board.get_square('H1'))
 
         return rooks
+
+    
+    def is_pat(self, color):
+        return len(get_all_moves(self, color)) == 0
+
     
