@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Luluchess</title>
+<meta name="description" content="Play chess against a dumb program" />
+<meta property="og:title" content="Luluchess" />
+<meta property="og:description" content="Play chess against a dumb program" />
+<meta property="og:image" content="https://static.thenounproject.com/png/777783-200.png" />
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
+</head>
+
+<body>
+    <div id="board">
+        <div class="square" id="a1"></div>
+        <div class="square" id="a2"></div>
+        <div class="square" id="a3"></div>
+        <div class="square" id="a4"></div>
+        <div class="square" id="a5"></div>
+        <div class="square" id="a6"></div>
+        <div class="square" id="a7"></div>
+        <div class="square" id="a8"></div>
+        <div class="square" id="b1"></div>
+        <div class="square" id="b2"></div>
+        <div class="square" id="b3"></div>
+        <div class="square" id="b4"></div>
+        <div class="square" id="b5"></div>
+        <div class="square" id="b6"></div>
+        <div class="square" id="b7"></div>
+        <div class="square" id="b8"></div>
+        <div class="square" id="c1"></div>
+        <div class="square" id="c2"></div>
+        <div class="square" id="c3"></div>
+        <div class="square" id="c4"></div>
+        <div class="square" id="c5"></div>
+        <div class="square" id="c6"></div>
+        <div class="square" id="c7"></div>
+        <div class="square" id="c8"></div>
+        <div class="square" id="d1"></div>
+        <div class="square" id="d2"></div>
+        <div class="square" id="d3"></div>
+        <div class="square" id="d4"></div>
+        <div class="square" id="d5"></div>
+        <div class="square" id="d6"></div>
+        <div class="square" id="d7"></div>
+        <div class="square" id="d8"></div>
+        <div class="square" id="e1"></div>
+        <div class="square" id="e2"></div>
+        <div class="square" id="e3"></div>
+        <div class="square" id="e4"></div>
+        <div class="square" id="e5"></div>
+        <div class="square" id="e6"></div>
+        <div class="square" id="e7"></div>
+        <div class="square" id="e8"></div>
+        <div class="square" id="f1"></div>
+        <div class="square" id="f2"></div>
+        <div class="square" id="f3"></div>
+        <div class="square" id="f4"></div>
+        <div class="square" id="f5"></div>
+        <div class="square" id="f6"></div>
+        <div class="square" id="f7"></div>
+        <div class="square" id="f8"></div>
+        <div class="square" id="g1"></div>
+        <div class="square" id="g2"></div>
+        <div class="square" id="g3"></div>
+        <div class="square" id="g4"></div>
+        <div class="square" id="g5"></div>
+        <div class="square" id="g6"></div>
+        <div class="square" id="g7"></div>
+        <div class="square" id="g8"></div>
+        <div class="square" id="h1"></div>
+        <div class="square" id="h2"></div>
+        <div class="square" id="h3"></div>
+        <div class="square" id="h4"></div>
+        <div class="square" id="h5"></div>
+        <div class="square" id="h6"></div>
+        <div class="square" id="h7"></div>
+        <div class="square" id="h8"></div>
+    </div>
+    <form>
+        <label for="start">Case de départ</label>
+        <input type="text" id="start" name="start">
+        <label for="end">Case d'arrivée</label>
+        <input type="text" id="end" name="end">
+    </form>
+    <button>Jouer</button>
+</body>
+
+<script>
+    var squares = [
+        "a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8",
+        "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8",
+        "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8",
+        "d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8",
+        "e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8",
+        "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8",
+        "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8",
+        "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8"
+    ]
+    var board = {
+        "a1": {
+            "type": "R",
+            "color": "white"
+        },
+        "b1": {
+            "type": "C",
+            "color": "white"
+        },
+        "c1": {
+            "type": "B",
+            "color": "white"
+        },
+        "d1": {
+            "type": "Q",
+            "color": "white"
+        },
+        "e1": {
+            "type": "K",
+            "color": "white"
+        },
+        "f1": {
+            "type": "B",
+            "color": "white"
+        },
+        "g1": {
+            "type": "C",
+            "color": "white"
+        },
+        "h1": {
+            "type": "R",
+            "color": "white"
+        },
+        "a2": {
+            "type": "P",
+            "color": "white"
+        },
+        "b2": {
+            "type": "P",
+            "color": "white"
+        },
+        "c2": {
+            "type": "P",
+            "color": "white"
+        },
+        "d2": {
+            "type": "P",
+            "color": "white"
+        },
+        "e2": {
+            "type": "P",
+            "color": "white"
+        },
+        "f2": {
+            "type": "P",
+            "color": "white"
+        },
+        "g2": {
+            "type": "P",
+            "color": "white"
+        },
+        "h2": {
+            "type": "P",
+            "color": "white"
+        },
+        "a8": {
+            "type": "R",
+            "color": "black"
+        },
+        "b8": {
+            "type": "C",
+            "color": "black"
+        },
+        "c8": {
+            "type": "B",
+            "color": "black"
+        },
+        "d8": {
+            "type": "Q",
+            "color": "black"
+        },
+        "e8": {
+            "type": "K",
+            "color": "black"
+        },
+        "f8": {
+            "type": "B",
+            "color": "black"
+        },
+        "g8": {
+            "type": "C",
+            "color": "black"
+        },
+        "h8": {
+            "type": "R",
+            "color": "black"
+        },
+        "a7": {
+            "type": "P",
+            "color": "black"
+        },
+        "b7": {
+            "type": "P",
+            "color": "black"
+        },
+        "c7": {
+            "type": "P",
+            "color": "black"
+        },
+        "d7": {
+            "type": "P",
+            "color": "black"
+        },
+        "e7": {
+            "type": "P",
+            "color": "black"
+        },
+        "f7": {
+            "type": "P",
+            "color": "black"
+        },
+        "g7": {
+            "type": "P",
+            "color": "black"
+        },
+        "h7": {
+            "type": "P",
+            "color": "black"
+        }
+    };
+    var game = {
+        "0": board
+    };
+    $(function(){
+	    $('button').click(function(){
+            var data = {
+                "game": JSON.stringify(game),
+                "start": $("#start").val(),
+                "end": $("#end").val()
+            };
+            $("#start").val('');
+            $("#end").val('');
+	    	$.ajax({
+	    		url: '/next_move',
+	    		data: data,
+	    		type: 'POST',
+	    		success: function(response){
+                    var arrayInt = Object.keys(response.game).map(function(item) {
+                        return parseInt(item, 10);
+                    });
+                    game = response.game;
+                    var received_board = response.game[Math.max(...arrayInt).toString()];
+                    console.log(received_board);
+                    for (k of squares) {
+                        $("#" + k).css({'background-image': 'none'});
+                    }
+                    for (k of Object.keys(received_board)) {
+                        switch(received_board[k].type) {
+                            case 'P':
+                                if (received_board[k].color === 'white') {
+                                    $("#" + k).css({'background-image': 'url("/static/images/white_pawn.png")'});
+                                } else {
+                                    $("#" + k).css({'background-image': 'url("/static/images/black_pawn.png")'});
+                                }
+                                break;
+                            case 'R':
+                                if (received_board[k].color === 'white') {
+                                    $("#" + k).css({'background-image': 'url("/static/images/white_rook.png")'});
+                                } else {
+                                    $("#" + k).css({'background-image': 'url("/static/images/black_rook.png")'});
+                                }
+                                break;
+                            case 'C':
+                                if (received_board[k].color === 'white') {
+                                    $("#" + k).css({'background-image': 'url("/static/images/white_knight.png")'});
+                                } else {
+                                    $("#" + k).css({'background-image': 'url("/static/images/black_knight.png")'});
+                                }
+                                break;
+                            case 'B':
+                                if (received_board[k].color === 'white') {
+                                    $("#" + k).css({'background-image': 'url("/static/images/white_bishop.png")'});
+                                } else {
+                                    $("#" + k).css({'background-image': 'url("/static/images/black_bishop.png")'});
+                                }
+                                break;
+                            case 'Q':
+                                if (received_board[k].color === 'white') {
+                                    $("#" + k).css({'background-image': 'url("/static/images/white_queen.png")'});
+                                } else {
+                                    $("#" + k).css({'background-image': 'url("/static/images/black_queen.png")'});
+                                }
+                                break;
+                            case 'K':
+                                if (received_board[k].color === 'white') {
+                                    $("#" + k).css({'background-image': 'url("/static/images/white_king.png")'});
+                                } else {
+                                    $("#" + k).css({'background-image': 'url("/static/images/black_king.png")'});
+                                }
+                                break;
+                        }
+                    }
+                    switch(response.message) {
+                        case 'black_checkmated':
+                            window.alert("Les blancs ont gagné");
+                            break;
+                        case 'white_checkmated':
+                            window.alert("Les noirs ont gagné");
+                            break;
+                        case 'pat':
+                            window.alert("Pat !");
+                            break;
+                    }
+	    		},
+	    		error: function(error){
+	    			window.alert("Mouvement illégal");
+	    		}
+	    	});
+	    });
+    });
+</script>

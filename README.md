@@ -2,9 +2,9 @@
 
 Creating a chess game without any built-in functions with Python.
 
-## Tests
+## Linting
 
-To run tests, make `python API/test.py`.
+The code has been standardized with Flake8.
 
 ## Structure
 
@@ -12,11 +12,10 @@ To run tests, make `python API/test.py`.
 ```json
 {
     "type": "K",
-    "color": "white",
-    "square": "f3"
+    "color": "white"
 }
 ```
-`type` can be `K` (Knight), `B` (Bishop), `P` (Pawn), `K` (King), `Q` (Queen) or `R` (Rook).
+`type` can be `C` (Knight), `B` (Bishop), `P` (Pawn), `K` (King), `Q` (Queen) or `R` (Rook).
 
 `color` can be `white` or `black`.
 
