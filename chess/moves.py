@@ -242,7 +242,6 @@ def get_black_moves(game):
                 for move in get_legal_moves(key, game)
             ]
             black_moves += legal_moves
-    print(black_moves)
     return black_moves
 
 
